@@ -96,11 +96,13 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
         
         {hasChildren && (
           <div className="relative">
+            {/* Always show vertical line from parent to children */}
             <div 
               className="w-0.5 bg-blue-400"
               style={{ height: '32px', margin: '0 auto' }}
             />
             
+            {/* Show horizontal line only when there are multiple children */}
             {node.children.length > 1 && (
               <div 
                 className="h-0.5 bg-blue-400 absolute"
@@ -118,10 +120,17 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
             >
               {node.children.map((child: TreeNode) => (
                 <div key={child.id} className="relative">
-                  {node.children.length > 1 && (
+                  {/* Always show vertical line from horizontal connector to child, except for single children */}
+                  {node.children.length > 1 ? (
                     <div 
                       className="w-0.5 h-8 bg-blue-400 absolute left-1/2 transform -translate-x-1/2"
                       style={{ top: '-32px' }}
+                    />
+                  ) : (
+                    // For single child, show connecting line directly
+                    <div 
+                      className="w-0.5 h-8 bg-blue-400 absolute left-1/2 transform -translate-x-1/2"
+                      style={{ top: '-40px' }}
                     />
                   )}
                   {renderTree(child, level + 1)}
