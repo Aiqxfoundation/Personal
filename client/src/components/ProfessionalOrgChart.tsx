@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import html2canvas from "html2canvas";
@@ -15,18 +14,48 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
   const chartRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
+  const downloadChart = async () => {
+    if (!chartRef.current) return;
+    
+    setIsDownloading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const canvas = await html2canvas(chartRef.current, {
+        backgroundColor: '#e6f0ff',
+        scale: 3,
+        useCORS: true,
+        allowTaint: false,
+        width: chartRef.current.scrollWidth,
+        height: chartRef.current.scrollHeight,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: chartRef.current.scrollWidth,
+        windowHeight: chartRef.current.scrollHeight
+      });
+      
+      const link = document.createElement('a');
+      link.download = 'organizational-chart.png';
+      link.href = canvas.toDataURL('image/png', 1.0);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Failed to download chart:', error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   const buildTree = (nodes: OrgNodeType[]): TreeNode[] => {
     const nodeMap = new Map<string, TreeNode>();
-    
     nodes.forEach(node => {
       nodeMap.set(node.id, { ...node, children: [] });
     });
 
     const roots: TreeNode[] = [];
-    
     nodes.forEach(node => {
       const nodeWithChildren = nodeMap.get(node.id)!;
-      
       if (node.parentId && nodeMap.has(node.parentId)) {
         nodeMap.get(node.parentId)!.children.push(nodeWithChildren);
       } else {
@@ -37,86 +66,69 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     return roots;
   };
 
-  const downloadChart = async () => {
-    if (!chartRef.current) return;
-    
-    setIsDownloading(true);
-    try {
-      const canvas = await html2canvas(chartRef.current, {
-        backgroundColor: '#ffffff',
-        scale: 2,
-        useCORS: true,
-        allowTaint: false,
-        width: chartRef.current.scrollWidth,
-        height: chartRef.current.scrollHeight
-      });
-      
-      const link = document.createElement('a');
-      link.download = 'organizational-chart.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    } catch (error) {
-      console.error('Failed to download chart:', error);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  const OrgBox = ({ node, isCEO = false }: { node: TreeNode; isCEO?: boolean }) => (
+    <div
+      className={`relative min-w-[180px] px-4 py-3 text-center rounded-lg border-2 transition-all ${
+        isCEO 
+          ? 'bg-blue-500 text-white border-blue-600 font-semibold' 
+          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+      }`}
+      style={{
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+      }}
+    >
+      <div className={`text-sm font-semibold ${isCEO ? 'text-white' : 'text-blue-600'} mb-1`}>
+        {node.title}
+      </div>
+      <div className={`text-sm ${isCEO ? 'text-white' : 'text-gray-800'}`}>
+        {node.name}
+      </div>
+    </div>
+  );
 
-  const renderOrgNode = (node: TreeNode, isRoot = false) => {
-    return (
-      <Card
-        key={node.id}
-        className={`min-w-[180px] p-4 text-center transition-all hover-elevate ${
-          isRoot ? 'bg-primary text-primary-foreground' : 'bg-card'
-        }`}
-        data-testid={`professional-node-${node.id}`}
-      >
-        <div className="space-y-1">
-          <div className={`text-sm font-semibold ${
-            isRoot ? 'text-primary-foreground' : 'text-primary'
-          }`}>
-            {node.title}
-          </div>
-          <div className={`text-sm ${
-            isRoot ? 'text-primary-foreground' : 'text-foreground'
-          }`}>
-            {node.name}
-          </div>
-        </div>
-      </Card>
-    );
-  };
-
-  const renderTreeNode = (node: TreeNode, level = 0) => {
-    const isRoot = level === 0;
-    const hasChildren = node.children.length > 0;
+  const renderTree = (node: TreeNode, level = 0): JSX.Element => {
+    const isCEO = level === 0;
+    const hasChildren = node.children && node.children.length > 0;
 
     return (
       <div key={node.id} className="flex flex-col items-center">
-        {renderOrgNode(node, isRoot)}
+        <OrgBox node={node} isCEO={isCEO} />
         
         {hasChildren && (
-          <>
-            <div className="w-0.5 h-8 bg-primary/40" />
+          <div className="relative">
+            <div 
+              className="w-0.5 bg-blue-400"
+              style={{ height: '32px', margin: '0 auto' }}
+            />
             
             {node.children.length > 1 && (
               <div 
-                className="h-0.5 bg-primary/40"
+                className="h-0.5 bg-blue-400 absolute"
                 style={{
-                  width: `${(node.children.length - 1) * 220}px`
+                  width: `${(node.children.length - 1) * 200}px`,
+                  left: `${-(node.children.length - 1) * 100}px`,
+                  top: '32px'
                 }}
               />
             )}
             
-            <div className="flex gap-8 mt-4">
-              {node.children.map(child => (
+            <div 
+              className="flex justify-center gap-8 mt-8"
+              style={{ gap: '50px' }}
+            >
+              {node.children.map((child: TreeNode) => (
                 <div key={child.id} className="relative">
-                  <div className="w-0.5 h-4 bg-primary/40 absolute top-[-1rem] left-1/2 transform -translate-x-1/2" />
-                  {renderTreeNode(child, level + 1)}
+                  {node.children.length > 1 && (
+                    <div 
+                      className="w-0.5 h-8 bg-blue-400 absolute left-1/2 transform -translate-x-1/2"
+                      style={{ top: '-32px' }}
+                    />
+                  )}
+                  {renderTree(child, level + 1)}
                 </div>
               ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     );
@@ -125,12 +137,18 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
   const tree = buildTree(nodes);
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 dark:from-background dark:to-secondary/20 relative">
-      <div className="absolute top-4 left-4 z-10">
+    <div 
+      className="w-full h-full relative overflow-auto"
+      style={{
+        background: 'linear-gradient(135deg, #e6f0ff 0%, #c9e0ff 100%)',
+        minHeight: '100vh'
+      }}
+    >
+      <div className="absolute top-4 left-4 z-20">
         <Button 
           onClick={downloadChart}
           disabled={isDownloading}
-          className="bg-primary hover:bg-primary/90"
+          className="bg-blue-500 hover:bg-blue-600 text-white shadow-lg"
           data-testid="button-download-chart"
         >
           <Download className="w-4 h-4 mr-2" />
@@ -139,19 +157,13 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
       </div>
 
       <div 
-        ref={chartRef} 
-        className="w-full h-full flex items-center justify-center p-16 overflow-auto"
+        ref={chartRef}
+        className="flex items-center justify-center p-16 min-h-full"
         data-testid="chart-container"
       >
-        {tree.length > 0 ? (
-          <div className="flex flex-col gap-12">
-            {tree.map(root => renderTreeNode(root))}
-          </div>
-        ) : (
-          <div className="text-center text-muted-foreground">
-            <p>No organizational data available</p>
-          </div>
-        )}
+        <div className="flex flex-col items-center">
+          {tree.map(root => renderTree(root))}
+        </div>
       </div>
     </div>
   );
