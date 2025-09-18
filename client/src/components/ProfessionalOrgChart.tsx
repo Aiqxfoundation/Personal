@@ -69,29 +69,32 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     return roots;
   };
 
-  // Layout constants for consistent positioning and connectors
-  const BOX_WIDTH = 220;
-  const H_SPACING = 80;
-  const V_SPACING = 40;
+  // Layout constants for perfect positioning matching reference image
+  const BOX_WIDTH = 180;
+  const BOX_HEIGHT = 60;
+  const H_SPACING = 60;
+  const V_SPACING = 50;
 
   const OrgBox = ({ node, isCEO = false }: { node: TreeNode; isCEO?: boolean }) => (
     <div
-      className={`relative z-10 px-4 py-3 text-center rounded-lg border-2 transition-all whitespace-normal break-words ${
+      className={`relative z-10 flex flex-col justify-center items-center text-center rounded-lg border-2 transition-all ${
         isCEO 
           ? 'bg-blue-500 text-white border-blue-600 font-semibold' 
           : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
       }`}
       style={{
         width: `${BOX_WIDTH}px`,
+        height: `${BOX_HEIGHT}px`,
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        lineHeight: '1.3',
-        hyphens: 'auto'
+        padding: '8px',
+        fontSize: '13px',
+        lineHeight: '1.2'
       }}
     >
-      <div className={`text-sm font-semibold ${isCEO ? 'text-white' : 'text-blue-600'} mb-1`}>
+      <div className={`font-semibold ${isCEO ? 'text-white' : 'text-blue-600'} mb-1`}>
         {node.title}
       </div>
-      <div className={`text-sm ${isCEO ? 'text-white' : 'text-gray-800'}`}>
+      <div className={`${isCEO ? 'text-white' : 'text-gray-800'} text-xs`}>
         {node.name}
       </div>
     </div>
@@ -102,49 +105,56 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     const hasChildren = node.children && node.children.length > 0;
 
     return (
-      <div key={node.id} className="flex flex-col items-center relative">
+      <div key={node.id} className="flex flex-col items-center">
         <OrgBox node={node} isCEO={isCEO} />
         
         {hasChildren && (
-          <div className="relative overflow-visible">
-            {/* Always show vertical line from parent down */}
+          <div className="relative" style={{ overflow: 'visible' }}>
+            {/* Vertical line from parent */}
             <div 
-              className="w-0.5 bg-blue-400 z-0 pointer-events-none absolute left-1/2 transform -translate-x-1/2"
-              style={{ height: `${V_SPACING}px` }}
+              className="absolute bg-blue-400 z-0 pointer-events-none"
+              style={{ 
+                width: '2px',
+                height: `${V_SPACING}px`,
+                left: '50%',
+                marginLeft: '-1px',
+                top: '0px'
+              }}
             />
             
-            {/* Horizontal connector for multiple children */}
+            {/* Horizontal connector line for multiple children */}
             {node.children.length > 1 && (
               <div 
-                className="h-0.5 bg-blue-400 z-0 pointer-events-none absolute"
+                className="absolute bg-blue-400 z-0 pointer-events-none"
                 style={{
+                  height: '2px',
                   width: `${(node.children.length - 1) * (BOX_WIDTH + H_SPACING)}px`,
                   left: `${-((node.children.length - 1) * (BOX_WIDTH + H_SPACING)) / 2}px`,
-                  top: `${V_SPACING}px`
+                  top: `${V_SPACING}px`,
+                  marginTop: '-1px'
                 }}
               />
             )}
             
-            {/* Children container with fixed spacing */}
+            {/* Children container */}
             <div 
-              className="flex items-start"
+              className="flex justify-center"
               style={{ 
                 gap: `${H_SPACING}px`,
-                marginTop: `${V_SPACING}px`
+                marginTop: `${V_SPACING + 20}px`
               }}
             >
-              {node.children.map((child: TreeNode, index: number) => (
-                <div 
-                  key={child.id} 
-                  className="relative"
-                  style={{ width: `${BOX_WIDTH}px` }}
-                >
-                  {/* Vertical connector from horizontal line to child */}
+              {node.children.map((child: TreeNode) => (
+                <div key={child.id} className="relative flex flex-col items-center">
+                  {/* Vertical line up to each child */}
                   <div 
-                    className="w-0.5 bg-blue-400 z-0 pointer-events-none absolute left-1/2 transform -translate-x-1/2"
+                    className="absolute bg-blue-400 z-0 pointer-events-none"
                     style={{ 
-                      height: `${V_SPACING}px`,
-                      top: `-${V_SPACING}px`
+                      width: '2px',
+                      height: '20px',
+                      left: '50%',
+                      marginLeft: '-1px',
+                      top: '-20px'
                     }}
                   />
                   {renderTree(child, level + 1)}
