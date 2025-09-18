@@ -19,11 +19,13 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     
     setIsDownloading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Wait for fonts to load
+      await document.fonts.ready;
+      await new Promise(resolve => setTimeout(resolve, 200));
       
       const canvas = await html2canvas(chartRef.current, {
-        backgroundColor: '#e6f0ff',
-        scale: 3,
+        backgroundColor: '#ffffff',
+        scale: 4,
         useCORS: true,
         allowTaint: false,
         width: chartRef.current.scrollWidth,
@@ -31,7 +33,8 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
         scrollX: 0,
         scrollY: 0,
         windowWidth: chartRef.current.scrollWidth,
-        windowHeight: chartRef.current.scrollHeight
+        windowHeight: chartRef.current.scrollHeight,
+        logging: false
       });
       
       const link = document.createElement('a');
@@ -66,15 +69,23 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     return roots;
   };
 
+  // Layout constants for consistent positioning and connectors
+  const BOX_WIDTH = 220;
+  const H_SPACING = 80;
+  const V_SPACING = 40;
+
   const OrgBox = ({ node, isCEO = false }: { node: TreeNode; isCEO?: boolean }) => (
     <div
-      className={`relative min-w-[180px] px-4 py-3 text-center rounded-lg border-2 transition-all ${
+      className={`relative z-10 px-4 py-3 text-center rounded-lg border-2 transition-all whitespace-normal break-words ${
         isCEO 
           ? 'bg-blue-500 text-white border-blue-600 font-semibold' 
           : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
       }`}
       style={{
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        width: `${BOX_WIDTH}px`,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        lineHeight: '1.3',
+        hyphens: 'auto'
       }}
     >
       <div className={`text-sm font-semibold ${isCEO ? 'text-white' : 'text-blue-600'} mb-1`}>
@@ -91,48 +102,51 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     const hasChildren = node.children && node.children.length > 0;
 
     return (
-      <div key={node.id} className="flex flex-col items-center">
+      <div key={node.id} className="flex flex-col items-center relative">
         <OrgBox node={node} isCEO={isCEO} />
         
         {hasChildren && (
-          <div className="relative">
-            {/* Always show vertical line from parent to children */}
+          <div className="relative overflow-visible">
+            {/* Always show vertical line from parent down */}
             <div 
-              className="w-0.5 bg-blue-400"
-              style={{ height: '32px', margin: '0 auto' }}
+              className="w-0.5 bg-blue-400 z-0 pointer-events-none absolute left-1/2 transform -translate-x-1/2"
+              style={{ height: `${V_SPACING}px` }}
             />
             
-            {/* Show horizontal line only when there are multiple children */}
+            {/* Horizontal connector for multiple children */}
             {node.children.length > 1 && (
               <div 
-                className="h-0.5 bg-blue-400 absolute"
+                className="h-0.5 bg-blue-400 z-0 pointer-events-none absolute"
                 style={{
-                  width: `${(node.children.length - 1) * 200}px`,
-                  left: `${-(node.children.length - 1) * 100}px`,
-                  top: '32px'
+                  width: `${(node.children.length - 1) * (BOX_WIDTH + H_SPACING)}px`,
+                  left: `${-((node.children.length - 1) * (BOX_WIDTH + H_SPACING)) / 2}px`,
+                  top: `${V_SPACING}px`
                 }}
               />
             )}
             
+            {/* Children container with fixed spacing */}
             <div 
-              className="flex justify-center gap-8 mt-8"
-              style={{ gap: '50px' }}
+              className="flex items-start"
+              style={{ 
+                gap: `${H_SPACING}px`,
+                marginTop: `${V_SPACING}px`
+              }}
             >
-              {node.children.map((child: TreeNode) => (
-                <div key={child.id} className="relative">
-                  {/* Always show vertical line from horizontal connector to child, except for single children */}
-                  {node.children.length > 1 ? (
-                    <div 
-                      className="w-0.5 h-8 bg-blue-400 absolute left-1/2 transform -translate-x-1/2"
-                      style={{ top: '-32px' }}
-                    />
-                  ) : (
-                    // For single child, show connecting line directly
-                    <div 
-                      className="w-0.5 h-8 bg-blue-400 absolute left-1/2 transform -translate-x-1/2"
-                      style={{ top: '-40px' }}
-                    />
-                  )}
+              {node.children.map((child: TreeNode, index: number) => (
+                <div 
+                  key={child.id} 
+                  className="relative"
+                  style={{ width: `${BOX_WIDTH}px` }}
+                >
+                  {/* Vertical connector from horizontal line to child */}
+                  <div 
+                    className="w-0.5 bg-blue-400 z-0 pointer-events-none absolute left-1/2 transform -translate-x-1/2"
+                    style={{ 
+                      height: `${V_SPACING}px`,
+                      top: `-${V_SPACING}px`
+                    }}
+                  />
                   {renderTree(child, level + 1)}
                 </div>
               ))}
