@@ -8,8 +8,6 @@ interface ProfessionalOrgChartProps {
   nodes: OrgNodeType[];
 }
 
-type TreeNode = OrgNodeType & { children: TreeNode[] };
-
 export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -19,7 +17,6 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     
     setIsDownloading(true);
     try {
-      // Wait for fonts to load
       await document.fonts.ready;
       await new Promise(resolve => setTimeout(resolve, 200));
       
@@ -50,44 +47,29 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     }
   };
 
-  const buildTree = (nodes: OrgNodeType[]): TreeNode[] => {
-    const nodeMap = new Map<string, TreeNode>();
-    nodes.forEach(node => {
-      nodeMap.set(node.id, { ...node, children: [] });
-    });
+  // Create a lookup for easy node access
+  const nodeMap = new Map<string, OrgNodeType>();
+  nodes.forEach(node => {
+    nodeMap.set(node.id, node);
+  });
 
-    const roots: TreeNode[] = [];
-    nodes.forEach(node => {
-      const nodeWithChildren = nodeMap.get(node.id)!;
-      if (node.parentId && nodeMap.has(node.parentId)) {
-        nodeMap.get(node.parentId)!.children.push(nodeWithChildren);
-      } else {
-        roots.push(nodeWithChildren);
-      }
-    });
+  // Find nodes by ID
+  const getNode = (id: string) => nodeMap.get(id);
 
-    return roots;
-  };
-
-  // Layout constants for perfect positioning matching reference image
-  const BOX_WIDTH = 180;
-  const BOX_HEIGHT = 60;
-  const H_SPACING = 60;
-  const V_SPACING = 50;
-
-  const OrgBox = ({ node, isCEO = false }: { node: TreeNode; isCEO?: boolean }) => (
+  // Organizational Box Component
+  const OrgBox = ({ node, isCEO = false }: { node: OrgNodeType; isCEO?: boolean }) => (
     <div
-      className={`relative z-10 flex flex-col justify-center items-center text-center rounded-lg border-2 transition-all ${
+      className={`relative z-10 flex flex-col justify-center items-center text-center rounded-lg border-2 ${
         isCEO 
           ? 'bg-blue-500 text-white border-blue-600 font-semibold' 
-          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+          : 'bg-white text-gray-700 border-gray-300'
       }`}
       style={{
-        width: `${BOX_WIDTH}px`,
-        height: `${BOX_HEIGHT}px`,
+        width: '180px',
+        height: '60px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         padding: '8px',
-        fontSize: '13px',
+        fontSize: '12px',
         lineHeight: '1.2'
       }}
     >
@@ -100,74 +82,24 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
     </div>
   );
 
-  const renderTree = (node: TreeNode, level = 0): JSX.Element => {
-    const isCEO = level === 0;
-    const hasChildren = node.children && node.children.length > 0;
-
-    return (
-      <div key={node.id} className="flex flex-col items-center">
-        <OrgBox node={node} isCEO={isCEO} />
-        
-        {hasChildren && (
-          <div className="relative" style={{ overflow: 'visible' }}>
-            {/* Vertical line from parent */}
-            <div 
-              className="absolute bg-blue-400 z-0 pointer-events-none"
-              style={{ 
-                width: '2px',
-                height: `${V_SPACING}px`,
-                left: '50%',
-                marginLeft: '-1px',
-                top: '0px'
-              }}
-            />
-            
-            {/* Horizontal connector line for multiple children */}
-            {node.children.length > 1 && (
-              <div 
-                className="absolute bg-blue-400 z-0 pointer-events-none"
-                style={{
-                  height: '2px',
-                  width: `${(node.children.length - 1) * (BOX_WIDTH + H_SPACING)}px`,
-                  left: `${-((node.children.length - 1) * (BOX_WIDTH + H_SPACING)) / 2}px`,
-                  top: `${V_SPACING}px`,
-                  marginTop: '-1px'
-                }}
-              />
-            )}
-            
-            {/* Children container */}
-            <div 
-              className="flex justify-center"
-              style={{ 
-                gap: `${H_SPACING}px`,
-                marginTop: `${V_SPACING + 20}px`
-              }}
-            >
-              {node.children.map((child: TreeNode) => (
-                <div key={child.id} className="relative flex flex-col items-center">
-                  {/* Vertical line up to each child */}
-                  <div 
-                    className="absolute bg-blue-400 z-0 pointer-events-none"
-                    style={{ 
-                      width: '2px',
-                      height: '20px',
-                      left: '50%',
-                      marginLeft: '-1px',
-                      top: '-20px'
-                    }}
-                  />
-                  {renderTree(child, level + 1)}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const tree = buildTree(nodes);
+  // Connector Line Component
+  const Line = ({ width, height, top, left, horizontal = false }: {
+    width?: number;
+    height?: number;
+    top: number;
+    left: number;
+    horizontal?: boolean;
+  }) => (
+    <div
+      className="absolute bg-blue-400 z-0"
+      style={{
+        width: horizontal ? `${width}px` : '2px',
+        height: horizontal ? '2px' : `${height}px`,
+        top: `${top}px`,
+        left: `${left}px`
+      }}
+    />
+  );
 
   return (
     <div 
@@ -182,7 +114,6 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           onClick={downloadChart}
           disabled={isDownloading}
           className="bg-blue-500 hover:bg-blue-600 text-white shadow-lg"
-          data-testid="button-download-chart"
         >
           <Download className="w-4 h-4 mr-2" />
           {isDownloading ? 'Downloading...' : 'Download Chart'}
@@ -192,10 +123,83 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
       <div 
         ref={chartRef}
         className="flex items-center justify-center p-16 min-h-full"
-        data-testid="chart-container"
       >
-        <div className="flex flex-col items-center">
-          {tree.map(root => renderTree(root))}
+        <div className="relative" style={{ width: '1200px', height: '800px' }}>
+          
+          {/* CEO - Level 1 */}
+          <div className="absolute" style={{ top: '50px', left: '510px' }}>
+            <OrgBox node={getNode('1')!} isCEO={true} />
+          </div>
+
+          {/* CEO to Level 2 connector */}
+          <Line top={110} left={600} height={40} />
+
+          {/* Level 2 - HRO and Pathologist */}
+          <div className="absolute" style={{ top: '170px', left: '240px' }}>
+            <OrgBox node={getNode('2')!} />
+          </div>
+          <div className="absolute" style={{ top: '170px', left: '780px' }}>
+            <OrgBox node={getNode('3')!} />
+          </div>
+
+          {/* Level 2 horizontal connector */}
+          <Line top={150} left={330} width={540} horizontal={true} />
+          <Line top={150} left={330} height={20} />
+          <Line top={150} left={870} height={20} />
+
+          {/* Level 2 to Level 3 connectors */}
+          <Line top={230} left={330} height={40} />
+          <Line top={230} left={870} height={40} />
+
+          {/* Level 3 - Lab Manager, Account Manager, Lab Technologist */}
+          <div className="absolute" style={{ top: '290px', left: '60px' }}>
+            <OrgBox node={getNode('4')!} />
+          </div>
+          <div className="absolute" style={{ top: '290px', left: '420px' }}>
+            <OrgBox node={getNode('5')!} />
+          </div>
+          <div className="absolute" style={{ top: '290px', left: '960px' }}>
+            <OrgBox node={getNode('6')!} />
+          </div>
+
+          {/* Level 3 horizontal connectors */}
+          <Line top={270} left={150} width={360} horizontal={true} />
+          <Line top={270} left={150} height={20} />
+          <Line top={270} left={510} height={20} />
+
+          <Line top={270} left={1050} height={20} />
+
+          {/* Level 3 to Level 4 connectors */}
+          <Line top={350} left={150} height={40} />
+          <Line top={350} left={510} height={40} />
+          <Line top={350} left={1050} height={40} />
+
+          {/* Level 4 - Bottom level positions */}
+          <div className="absolute" style={{ top: '410px', left: '60px' }}>
+            <OrgBox node={getNode('7')!} />
+          </div>
+          <div className="absolute" style={{ top: '410px', left: '240px' }}>
+            <OrgBox node={getNode('8')!} />
+          </div>
+          <div className="absolute" style={{ top: '410px', left: '420px' }}>
+            <OrgBox node={getNode('9')!} />
+          </div>
+          <div className="absolute" style={{ top: '410px', left: '780px' }}>
+            <OrgBox node={getNode('10')!} />
+          </div>
+          <div className="absolute" style={{ top: '410px', left: '960px' }}>
+            <OrgBox node={getNode('11')!} />
+          </div>
+
+          {/* Level 4 horizontal connectors */}
+          <Line top={390} left={150} width={180} horizontal={true} />
+          <Line top={390} left={150} height={20} />
+          <Line top={390} left={330} height={20} />
+
+          <Line top={390} left={870} width={180} horizontal={true} />
+          <Line top={390} left={870} height={20} />
+          <Line top={390} left={1050} height={20} />
+
         </div>
       </div>
     </div>
