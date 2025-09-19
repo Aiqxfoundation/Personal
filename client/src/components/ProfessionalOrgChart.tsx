@@ -178,16 +178,16 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           <div className="absolute" style={{ top: '410px', left: '60px' }}>
             <OrgBox node={getNode('7')!} />
           </div>
-          <div className="absolute" style={{ top: '410px', left: '240px' }}>
+          <div className="absolute" style={{ top: '410px', left: '220px' }}>
             <OrgBox node={getNode('8')!} />
           </div>
-          <div className="absolute" style={{ top: '410px', left: '420px' }}>
+          <div className="absolute" style={{ top: '410px', left: '380px' }}>
             <OrgBox node={getNode('9')!} />
           </div>
-          <div className="absolute" style={{ top: '410px', left: '780px' }}>
+          <div className="absolute" style={{ top: '410px', left: '540px' }}>
             <OrgBox node={getNode('10')!} />
           </div>
-          <div className="absolute" style={{ top: '410px', left: '960px' }}>
+          <div className="absolute" style={{ top: '410px', left: '700px' }}>
             <OrgBox node={getNode('11')!} />
           </div>
 
