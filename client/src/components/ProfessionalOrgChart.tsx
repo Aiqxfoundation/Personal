@@ -149,7 +149,7 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
 
           {/* Level 2 to Level 3 connectors */}
           <Line top={230} left={330} height={40} />
-          <Line top={230} left={870} height={40} />
+          <Line top={230} left={870} height={60} /> {/* Extended line to connect Pathologist to Lab Technologist */}
 
           {/* Level 3 - Lab Manager, Account Manager, Lab Technologist */}
           <div className="absolute" style={{ top: '290px', left: '60px' }}>
