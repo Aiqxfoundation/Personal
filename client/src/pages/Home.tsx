@@ -9,9 +9,9 @@ export default function Home() {
     { id: '4', name: 'Danish Gill', title: 'Lab Manager', parentId: '2' },
     { id: '5', name: 'Muhammad Waseem', title: 'Account Manager', parentId: '2' },
     { id: '6', name: 'Moon Anwar', title: 'Lab Technologist', parentId: '3' },
-    { id: '7', name: 'Mudasir', title: 'Senior Technician', parentId: '4' },
-    { id: '8', name: 'Muhammad Adeel', title: 'Jr Lab Technician', parentId: '4' },
-    { id: '9', name: 'Saba Noor', title: 'Lab Assistant', parentId: '5' },
+    { id: '7', name: 'Mudasir', title: 'Senior Technician', parentId: '6' },
+    { id: '8', name: 'Muhammad Adeel', title: 'Jr Lab Technician', parentId: '6' },
+    { id: '9', name: 'Saba Noor', title: 'Lab Assistant', parentId: '6' },
     { id: '10', name: 'Sahar Nasir', title: 'Lab Technologist', parentId: '6' },
     { id: '11', name: 'Danish Gill & Bisma', title: 'Phlebotomist', parentId: '6' }
   ];
