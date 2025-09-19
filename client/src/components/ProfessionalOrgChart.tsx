@@ -158,7 +158,7 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           <div className="absolute" style={{ top: '290px', left: '420px' }}>
             <OrgBox node={getNode('5')!} />
           </div>
-          <div className="absolute" style={{ top: '290px', left: '960px' }}>
+          <div className="absolute" style={{ top: '290px', left: '780px' }}>
             <OrgBox node={getNode('6')!} />
           </div>
 
@@ -167,12 +167,12 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           <Line top={270} left={150} height={20} />
           <Line top={270} left={510} height={20} />
 
-          <Line top={270} left={1050} height={20} />
+          {/* <Line top={270} left={1050} height={20} /> */} {/* Lab Technologist connector - removed */}
 
           {/* Level 3 to Level 4 connectors */}
           {/* <Line top={350} left={150} height={40} /> */} {/* Lab Manager connector - disconnected */}
           {/* <Line top={350} left={510} height={40} /> */} {/* Account Manager connector - disconnected */}
-          <Line top={350} left={1050} height={40} />
+          {/* <Line top={350} left={1050} height={40} /> */} {/* Lab Technologist to subordinates - removed */}
 
           {/* Level 4 - Bottom level positions */}
           <div className="absolute" style={{ top: '410px', left: '60px' }}>
