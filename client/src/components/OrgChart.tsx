@@ -56,31 +56,42 @@ export default function OrgChart({ nodes, onEdit, onDelete, onAddChild }: OrgCha
 
         {/* Children */}
         {hasChildren && (
-          <>
-            {/* Vertical line down */}
+          <div className="flex flex-col items-center">
+            {/* Vertical line down from parent */}
             <div className="w-0.5 h-8 bg-border" />
             
-            {/* Horizontal line across children */}
+            {/* Connection point for horizontal line */}
             {node.children.length > 1 && (
-              <div className="relative w-full">
-                <div className="h-0.5 bg-border absolute top-0" style={{
-                  left: `${50 / node.children.length}%`,
-                  right: `${50 / node.children.length}%`
-                }} />
-              </div>
+              <div className="w-0.5 h-4 bg-border" />
             )}
             
             {/* Children container */}
-            <div className={`flex gap-8 mt-4 ${node.children.length === 1 ? 'justify-center' : 'justify-between'}`}>
-              {node.children.map(child => (
-                <div key={child.id} className="relative">
-                  {/* Vertical line up to child */}
-                  <div className="w-0.5 h-4 bg-border absolute top-[-1rem] left-1/2 transform -translate-x-1/2" />
-                  {renderNode(child, level + 1)}
-                </div>
-              ))}
+            <div className="relative">
+              {/* Horizontal connecting line - spans across all children */}
+              {node.children.length > 1 && (
+                <div 
+                  className="absolute h-0.5 bg-border"
+                  style={{
+                    top: node.children.length > 1 ? '0px' : '0px',
+                    left: '0px',
+                    right: '0px'
+                  }}
+                />
+              )}
+              
+              {/* Children layout */}
+              <div className={`flex ${node.children.length === 1 ? 'justify-center' : 'justify-between'} gap-16 pt-4`}>
+                {node.children.map((child, index) => (
+                  <div key={child.id} className="relative flex flex-col items-center">
+                    {/* Vertical line up from horizontal line to child */}
+                    <div className="w-0.5 h-4 bg-border" />
+                    {/* Child node */}
+                    {renderNode(child, level + 1)}
+                  </div>
+                ))}
+              </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     );
