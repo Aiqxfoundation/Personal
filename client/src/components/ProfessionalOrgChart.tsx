@@ -172,11 +172,11 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
 
           {/* Level 3 to Level 4 connectors - CLEAR ALL OLD LINES */}
           {/* Moon Anwar (Lab Technologist) to subordinates connector */}
-          <Line top={350} left={740} height={40} /> {/* Vertical line down from Moon Anwar */}
+          <Line top={350} left={740} height={110} /> {/* Vertical line down from Moon Anwar to new horizontal line */}
 
           {/* Level 4 - Bottom level positions - All 5 subordinates under Moon Anwar */}
           <div className="absolute left-1/2 -translate-x-1/2" 
-               style={{ top: '410px', display: 'grid', gridTemplateColumns: 'repeat(5, 180px)', columnGap: '40px' }}>
+               style={{ top: '480px', display: 'grid', gridTemplateColumns: 'repeat(5, 200px)', columnGap: '50px' }}>
             <OrgBox node={getNode('7')!} /> {/* Mudasir - Senior Technician */}
             <OrgBox node={getNode('8')!} /> {/* Muhammad Adeel - Jr Lab Technician */}
             <OrgBox node={getNode('9')!} /> {/* Saba Noor - Lab Assistant */}
@@ -184,16 +184,16 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
             <OrgBox node={getNode('11')!} /> {/* Danish Gill & Bisma - Phlebotomist */}
           </div>
 
-          {/* FIXED CONNECTIONS: Moon Anwar to all 5 subordinates - Properly aligned to box centers */}
-          {/* Horizontal line connecting all 5 subordinates - correct width and positioning */}
-          <Line top={390} left={90} width={880} horizontal={true} />
+          {/* FIXED CONNECTIONS: Moon Anwar to all 5 subordinates - Recalculated for larger boxes */}
+          {/* Horizontal line connecting all 5 subordinates - updated width and positioning */}
+          <Line top={460} left={150} width={1000} horizontal={true} />
           
-          {/* Vertical lines from horizontal line to each subordinate - aligned to actual box centers */}
-          <Line top={390} left={90} height={20} />   {/* To Mudasir */}
-          <Line top={390} left={310} height={20} />  {/* To Muhammad Adeel */}
-          <Line top={390} left={530} height={20} />  {/* To Saba Noor */}
-          <Line top={390} left={750} height={20} />  {/* To Sahar Nasir */}
-          <Line top={390} left={970} height={20} />  {/* To Danish Gill & Bisma */}
+          {/* Vertical lines from horizontal line to each subordinate - aligned to new box centers */}
+          <Line top={460} left={150} height={20} />   {/* To Mudasir */}
+          <Line top={460} left={400} height={20} />  {/* To Muhammad Adeel */}
+          <Line top={460} left={650} height={20} />  {/* To Saba Noor */}
+          <Line top={460} left={900} height={20} />  {/* To Sahar Nasir - FIXED ALIGNMENT */}
+          <Line top={460} left={1150} height={20} />  {/* To Danish Gill & Bisma */}
 
         </div>
       </div>
