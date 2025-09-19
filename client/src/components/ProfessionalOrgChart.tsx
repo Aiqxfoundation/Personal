@@ -184,16 +184,16 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
             <OrgBox node={getNode('11')!} /> {/* Danish Gill & Bisma - Phlebotomist */}
           </div>
 
-          {/* NEW CLEAR CONNECTIONS: Moon Anwar to all 5 subordinates */}
-          {/* Horizontal line connecting all 5 subordinates */}
-          <Line top={390} left={90} width={720} horizontal={true} />
+          {/* FIXED CONNECTIONS: Moon Anwar to all 5 subordinates - Properly aligned to box centers */}
+          {/* Horizontal line connecting all 5 subordinates - correct width and positioning */}
+          <Line top={390} left={90} width={880} horizontal={true} />
           
-          {/* Vertical lines from horizontal line to each subordinate */}
+          {/* Vertical lines from horizontal line to each subordinate - aligned to actual box centers */}
           <Line top={390} left={90} height={20} />   {/* To Mudasir */}
-          <Line top={390} left={270} height={20} />  {/* To Muhammad Adeel */}
-          <Line top={390} left={450} height={20} />  {/* To Saba Noor */}
-          <Line top={390} left={630} height={20} />  {/* To Sahar Nasir */}
-          <Line top={390} left={810} height={20} />  {/* To Danish Gill & Bisma */}
+          <Line top={390} left={310} height={20} />  {/* To Muhammad Adeel */}
+          <Line top={390} left={530} height={20} />  {/* To Saba Noor */}
+          <Line top={390} left={750} height={20} />  {/* To Sahar Nasir */}
+          <Line top={390} left={970} height={20} />  {/* To Danish Gill & Bisma */}
 
         </div>
       </div>
