@@ -120,52 +120,53 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
         </Button>
       </div>
 
-      <div 
-        ref={chartRef}
-        className="flex items-center justify-center p-16 min-h-full"
-      >
-        <div className="relative" style={{ width: '1200px', height: '800px' }}>
+      <div className="flex items-center justify-center p-16 min-h-full">
+        <div 
+          ref={chartRef}
+          className="inline-block bg-white p-24 rounded-xl"
+        >
+          <div className="relative mx-auto" style={{ width: '1060px', height: '600px' }}>
           
           {/* CEO - Level 1 */}
-          <div className="absolute" style={{ top: '50px', left: '510px' }}>
+          <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '50px' }}>
             <OrgBox node={getNode('1')!} isCEO={true} />
           </div>
 
           {/* CEO to Level 2 connector */}
-          <Line top={110} left={600} height={40} />
+          <Line top={110} left={500} height={40} />
 
           {/* Level 2 - HRO and Pathologist */}
-          <div className="absolute" style={{ top: '170px', left: '240px' }}>
+          <div className="absolute" style={{ top: '170px', left: '200px' }}>
             <OrgBox node={getNode('2')!} />
           </div>
-          <div className="absolute" style={{ top: '170px', left: '780px' }}>
+          <div className="absolute" style={{ top: '170px', left: '650px' }}>
             <OrgBox node={getNode('3')!} />
           </div>
 
           {/* Level 2 horizontal connector */}
-          <Line top={150} left={330} width={540} horizontal={true} />
-          <Line top={150} left={330} height={20} />
-          <Line top={150} left={870} height={20} />
+          <Line top={150} left={290} width={450} horizontal={true} />
+          <Line top={150} left={290} height={20} />
+          <Line top={150} left={740} height={20} />
 
           {/* Level 2 to Level 3 connectors */}
-          <Line top={230} left={330} height={40} />
-          <Line top={230} left={870} height={60} /> {/* Extended line to connect Pathologist to Lab Technologist */}
+          <Line top={230} left={290} height={40} />
+          <Line top={230} left={740} height={60} /> {/* Extended line to connect Pathologist to Lab Technologist */}
 
           {/* Level 3 - Lab Manager, Account Manager, Lab Technologist */}
           <div className="absolute" style={{ top: '290px', left: '60px' }}>
             <OrgBox node={getNode('4')!} />
           </div>
-          <div className="absolute" style={{ top: '290px', left: '420px' }}>
+          <div className="absolute" style={{ top: '290px', left: '320px' }}>
             <OrgBox node={getNode('5')!} />
           </div>
-          <div className="absolute" style={{ top: '290px', left: '780px' }}>
+          <div className="absolute" style={{ top: '290px', left: '650px' }}>
             <OrgBox node={getNode('6')!} />
           </div>
 
           {/* Level 3 horizontal connectors */}
-          <Line top={270} left={150} width={360} horizontal={true} />
+          <Line top={270} left={150} width={260} horizontal={true} />
           <Line top={270} left={150} height={20} />
-          <Line top={270} left={510} height={20} />
+          <Line top={270} left={410} height={20} />
 
           {/* <Line top={270} left={1050} height={20} /> */} {/* Lab Technologist connector - removed */}
 
@@ -174,20 +175,13 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           {/* <Line top={350} left={510} height={40} /> */} {/* Account Manager connector - disconnected */}
           {/* <Line top={350} left={1050} height={40} /> */} {/* Lab Technologist to subordinates - removed */}
 
-          {/* Level 4 - Bottom level positions */}
-          <div className="absolute" style={{ top: '410px', left: '60px' }}>
+          {/* Level 4 - Bottom level positions with proper spacing */}
+          <div className="absolute left-1/2 -translate-x-1/2" 
+               style={{ top: '410px', display: 'grid', gridTemplateColumns: 'repeat(5, 180px)', columnGap: '40px' }}>
             <OrgBox node={getNode('7')!} />
-          </div>
-          <div className="absolute" style={{ top: '410px', left: '220px' }}>
             <OrgBox node={getNode('8')!} />
-          </div>
-          <div className="absolute" style={{ top: '410px', left: '380px' }}>
             <OrgBox node={getNode('9')!} />
-          </div>
-          <div className="absolute" style={{ top: '410px', left: '540px' }}>
             <OrgBox node={getNode('10')!} />
-          </div>
-          <div className="absolute" style={{ top: '410px', left: '700px' }}>
             <OrgBox node={getNode('11')!} />
           </div>
 
@@ -201,6 +195,7 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           {/* <Line top={390} left={1050} height={20} /> */}
 
         </div>
+      </div>
       </div>
     </div>
   );
