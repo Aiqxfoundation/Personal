@@ -22,7 +22,7 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
       
       const canvas = await html2canvas(chartRef.current, {
         backgroundColor: '#ffffff',
-        scale: 6,
+        scale: 8,
         useCORS: true,
         allowTaint: false,
         width: chartRef.current.scrollWidth,
@@ -56,7 +56,7 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
   // Find nodes by ID
   const getNode = (id: string) => nodeMap.get(id);
 
-  // Organizational Box Component
+  // Organizational Box Component - BIGGER BOXES AND FONTS
   const OrgBox = ({ node, isCEO = false }: { node: OrgNodeType; isCEO?: boolean }) => (
     <div
       className={`relative z-10 flex flex-col justify-center items-center text-center rounded-lg border-2 ${
@@ -65,18 +65,18 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           : 'bg-white text-gray-700 border-gray-300'
       }`}
       style={{
-        width: '200px',
-        height: '80px',
-        boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
-        padding: '12px',
-        fontSize: '16px',
-        lineHeight: '1.3'
+        width: '250px',
+        height: '100px',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+        padding: '16px',
+        fontSize: '20px',
+        lineHeight: '1.4'
       }}
     >
       <div className={`font-semibold ${isCEO ? 'text-white' : 'text-blue-600'} mb-1`}>
         {node.title}
       </div>
-      <div className={`${isCEO ? 'text-white' : 'text-gray-800'} text-sm`}>
+      <div className={`${isCEO ? 'text-white' : 'text-gray-800'} text-base font-medium`}>
         {node.name}
       </div>
     </div>
@@ -125,75 +125,71 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           ref={chartRef}
           className="inline-block bg-white p-24 rounded-xl"
         >
-          <div className="relative mx-auto" style={{ width: '1300px', height: '750px' }}>
+          <div className="relative mx-auto" style={{ width: '1800px', height: '1000px' }}>
           
           {/* CEO - Level 1 */}
           <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '50px' }}>
             <OrgBox node={getNode('1')!} isCEO={true} />
           </div>
 
-          {/* CEO to Level 2 connector */}
-          <Line top={110} left={500} height={40} />
+          {/* CEO to Level 2 connector - FIXED ALIGNMENT */}
+          <Line top={150} left={650} height={50} />
 
           {/* Level 2 - HRO and Pathologist */}
-          <div className="absolute" style={{ top: '170px', left: '200px' }}>
+          <div className="absolute" style={{ top: '220px', left: '300px' }}>
             <OrgBox node={getNode('2')!} />
           </div>
-          <div className="absolute" style={{ top: '170px', left: '650px' }}>
+          <div className="absolute" style={{ top: '220px', left: '900px' }}>
             <OrgBox node={getNode('3')!} />
           </div>
 
           {/* Level 2 horizontal connector */}
-          <Line top={150} left={290} width={450} horizontal={true} />
-          <Line top={150} left={290} height={20} />
-          <Line top={150} left={740} height={20} />
+          <Line top={200} left={425} width={575} horizontal={true} />
+          <Line top={200} left={425} height={20} />
+          <Line top={200} left={1025} height={20} />
 
           {/* Level 2 to Level 3 connectors */}
-          <Line top={230} left={290} height={40} />
-          <Line top={230} left={740} height={60} /> {/* Extended line to connect Pathologist to Lab Technologist */}
+          <Line top={320} left={425} height={60} />
+          <Line top={320} left={1025} height={80} />
 
           {/* Level 3 - Lab Manager, Account Manager, Lab Technologist */}
-          <div className="absolute" style={{ top: '290px', left: '60px' }}>
+          <div className="absolute" style={{ top: '400px', left: '150px' }}>
             <OrgBox node={getNode('4')!} />
           </div>
-          <div className="absolute" style={{ top: '290px', left: '320px' }}>
+          <div className="absolute" style={{ top: '400px', left: '500px' }}>
             <OrgBox node={getNode('5')!} />
           </div>
-          <div className="absolute" style={{ top: '290px', left: '650px' }}>
+          <div className="absolute" style={{ top: '400px', left: '900px' }}>
             <OrgBox node={getNode('6')!} />
           </div>
 
           {/* Level 3 horizontal connectors */}
-          <Line top={270} left={150} width={260} horizontal={true} />
-          <Line top={270} left={150} height={20} />
-          <Line top={270} left={410} height={20} />
+          <Line top={380} left={275} width={350} horizontal={true} />
+          <Line top={380} left={275} height={20} />
+          <Line top={380} left={625} height={20} />
 
-          <Line top={270} left={740} height={20} /> {/* Lab Technologist connector - restored */}
+          <Line top={380} left={1025} height={20} />
 
-          {/* Level 3 to Level 4 connectors - CLEAR ALL OLD LINES */}
-          {/* Moon Anwar (Lab Technologist) to subordinates connector */}
-          <Line top={350} left={740} height={110} /> {/* Vertical line down from Moon Anwar to new horizontal line */}
+          {/* Moon Anwar to subordinates connector */}
+          <Line top={500} left={1025} height={180} />
 
-          {/* Level 4 - Bottom level positions - All 5 subordinates under Moon Anwar */}
+          {/* Level 4 - All 5 subordinates under Moon Anwar */}
           <div className="absolute left-1/2 -translate-x-1/2" 
-               style={{ top: '480px', display: 'grid', gridTemplateColumns: 'repeat(5, 200px)', columnGap: '50px' }}>
-            <OrgBox node={getNode('7')!} /> {/* Mudasir - Senior Technician */}
-            <OrgBox node={getNode('8')!} /> {/* Muhammad Adeel - Jr Lab Technician */}
-            <OrgBox node={getNode('9')!} /> {/* Saba Noor - Lab Assistant */}
-            <OrgBox node={getNode('10')!} /> {/* Sahar Nasir - Lab Technologist */}
-            <OrgBox node={getNode('11')!} /> {/* Danish Gill & Bisma - Phlebotomist */}
+               style={{ top: '680px', display: 'grid', gridTemplateColumns: 'repeat(5, 250px)', columnGap: '75px' }}>
+            <OrgBox node={getNode('7')!} />
+            <OrgBox node={getNode('8')!} />
+            <OrgBox node={getNode('9')!} />
+            <OrgBox node={getNode('10')!} />
+            <OrgBox node={getNode('11')!} />
           </div>
 
-          {/* FIXED CONNECTIONS: Moon Anwar to all 5 subordinates - Recalculated for larger boxes */}
-          {/* Horizontal line connecting all 5 subordinates - updated width and positioning */}
-          <Line top={460} left={150} width={1000} horizontal={true} />
-          
-          {/* Vertical lines from horizontal line to each subordinate - aligned to new box centers */}
-          <Line top={460} left={150} height={20} />   {/* To Mudasir */}
-          <Line top={460} left={400} height={20} />  {/* To Muhammad Adeel */}
-          <Line top={460} left={650} height={20} />  {/* To Saba Noor */}
-          <Line top={460} left={900} height={20} />  {/* To Sahar Nasir - FIXED ALIGNMENT */}
-          <Line top={460} left={1150} height={20} />  {/* To Danish Gill & Bisma */}
+          {/* PERFECT CONNECTIONS: Moon Anwar to all 5 subordinates */}
+          <Line top={680} left={275} width={1300} horizontal={true} />
+          <Line top={680} left={275} height={20} />
+          <Line top={680} left={587} height={20} />
+          <Line top={680} left={900} height={20} />
+          <Line top={680} left={1212} height={20} />
+          <Line top={680} left={1525} height={20} />
 
         </div>
       </div>
