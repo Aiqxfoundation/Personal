@@ -170,33 +170,30 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
 
           <Line top={270} left={740} height={20} /> {/* Lab Technologist connector - restored */}
 
-          {/* Level 3 to Level 4 connectors */}
-          {/* <Line top={350} left={150} height={40} /> */} {/* Lab Manager connector - disconnected */}
-          {/* <Line top={350} left={510} height={40} /> */} {/* Account Manager connector - disconnected */}
-          <Line top={350} left={740} height={40} /> {/* Lab Technologist to subordinates - restored */}
+          {/* Level 3 to Level 4 connectors - CLEAR ALL OLD LINES */}
+          {/* Moon Anwar (Lab Technologist) to subordinates connector */}
+          <Line top={350} left={740} height={40} /> {/* Vertical line down from Moon Anwar */}
 
-          {/* Level 4 - Bottom level positions with proper spacing */}
+          {/* Level 4 - Bottom level positions - All 5 subordinates under Moon Anwar */}
           <div className="absolute left-1/2 -translate-x-1/2" 
                style={{ top: '410px', display: 'grid', gridTemplateColumns: 'repeat(5, 180px)', columnGap: '40px' }}>
-            <OrgBox node={getNode('7')!} />
-            <OrgBox node={getNode('8')!} />
-            <OrgBox node={getNode('9')!} />
-            <OrgBox node={getNode('10')!} />
-            <OrgBox node={getNode('11')!} />
+            <OrgBox node={getNode('7')!} /> {/* Mudasir - Senior Technician */}
+            <OrgBox node={getNode('8')!} /> {/* Muhammad Adeel - Jr Lab Technician */}
+            <OrgBox node={getNode('9')!} /> {/* Saba Noor - Lab Assistant */}
+            <OrgBox node={getNode('10')!} /> {/* Sahar Nasir - Lab Technologist */}
+            <OrgBox node={getNode('11')!} /> {/* Danish Gill & Bisma - Phlebotomist */}
           </div>
 
-          {/* Level 4 horizontal connectors */}
-          {/* <Line top={390} left={150} width={180} horizontal={true} /> */} {/* Lab Manager subordinates - disconnected */}
-          {/* <Line top={390} left={150} height={20} /> */}
-          {/* <Line top={390} left={330} height={20} /> */}
-
-          {/* Lab Technologist to all 5 subordinates - horizontal connector */}
-          <Line top={390} left={90} width={720} horizontal={true} /> {/* Horizontal line connecting all 5 subordinates */}
-          <Line top={390} left={90} height={20} /> {/* Vertical to Senior Technician */}
-          <Line top={390} left={270} height={20} /> {/* Vertical to Jr Lab Technician */}
-          <Line top={390} left={450} height={20} /> {/* Vertical to Lab Assistant */}
-          <Line top={390} left={630} height={20} /> {/* Vertical to Lab Technologist */}
-          <Line top={390} left={810} height={20} /> {/* Vertical to Phlebotomist */}
+          {/* NEW CLEAR CONNECTIONS: Moon Anwar to all 5 subordinates */}
+          {/* Horizontal line connecting all 5 subordinates */}
+          <Line top={390} left={90} width={720} horizontal={true} />
+          
+          {/* Vertical lines from horizontal line to each subordinate */}
+          <Line top={390} left={90} height={20} />   {/* To Mudasir */}
+          <Line top={390} left={270} height={20} />  {/* To Muhammad Adeel */}
+          <Line top={390} left={450} height={20} />  {/* To Saba Noor */}
+          <Line top={390} left={630} height={20} />  {/* To Sahar Nasir */}
+          <Line top={390} left={810} height={20} />  {/* To Danish Gill & Bisma */}
 
         </div>
       </div>
