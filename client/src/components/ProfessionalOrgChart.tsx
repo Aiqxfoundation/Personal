@@ -170,8 +170,8 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           <Line top={270} left={1050} height={20} />
 
           {/* Level 3 to Level 4 connectors */}
-          <Line top={350} left={150} height={40} />
-          <Line top={350} left={510} height={40} />
+          {/* <Line top={350} left={150} height={40} /> */} {/* Lab Manager connector - disconnected */}
+          {/* <Line top={350} left={510} height={40} /> */} {/* Account Manager connector - disconnected */}
           <Line top={350} left={1050} height={40} />
 
           {/* Level 4 - Bottom level positions */}
@@ -192,13 +192,13 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           </div>
 
           {/* Level 4 horizontal connectors */}
-          <Line top={390} left={150} width={180} horizontal={true} />
-          <Line top={390} left={150} height={20} />
-          <Line top={390} left={330} height={20} />
+          {/* <Line top={390} left={150} width={180} horizontal={true} /> */} {/* Lab Manager subordinates - disconnected */}
+          {/* <Line top={390} left={150} height={20} /> */}
+          {/* <Line top={390} left={330} height={20} /> */}
 
-          <Line top={390} left={870} width={180} horizontal={true} />
-          <Line top={390} left={870} height={20} />
-          <Line top={390} left={1050} height={20} />
+          {/* <Line top={390} left={870} width={180} horizontal={true} /> */} {/* Account Manager subordinates - disconnected */}
+          {/* <Line top={390} left={870} height={20} /> */}
+          {/* <Line top={390} left={1050} height={20} /> */}
 
         </div>
       </div>
