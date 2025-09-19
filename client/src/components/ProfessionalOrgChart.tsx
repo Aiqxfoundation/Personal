@@ -168,12 +168,12 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           <Line top={270} left={150} height={20} />
           <Line top={270} left={410} height={20} />
 
-          {/* <Line top={270} left={1050} height={20} /> */} {/* Lab Technologist connector - removed */}
+          <Line top={270} left={740} height={20} /> {/* Lab Technologist connector - restored */}
 
           {/* Level 3 to Level 4 connectors */}
           {/* <Line top={350} left={150} height={40} /> */} {/* Lab Manager connector - disconnected */}
           {/* <Line top={350} left={510} height={40} /> */} {/* Account Manager connector - disconnected */}
-          {/* <Line top={350} left={1050} height={40} /> */} {/* Lab Technologist to subordinates - removed */}
+          <Line top={350} left={740} height={40} /> {/* Lab Technologist to subordinates - restored */}
 
           {/* Level 4 - Bottom level positions with proper spacing */}
           <div className="absolute left-1/2 -translate-x-1/2" 
@@ -190,9 +190,13 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           {/* <Line top={390} left={150} height={20} /> */}
           {/* <Line top={390} left={330} height={20} /> */}
 
-          {/* <Line top={390} left={870} width={180} horizontal={true} /> */} {/* Account Manager subordinates - disconnected */}
-          {/* <Line top={390} left={870} height={20} /> */}
-          {/* <Line top={390} left={1050} height={20} /> */}
+          {/* Lab Technologist to all 5 subordinates - horizontal connector */}
+          <Line top={390} left={90} width={720} horizontal={true} /> {/* Horizontal line connecting all 5 subordinates */}
+          <Line top={390} left={90} height={20} /> {/* Vertical to Senior Technician */}
+          <Line top={390} left={270} height={20} /> {/* Vertical to Jr Lab Technician */}
+          <Line top={390} left={450} height={20} /> {/* Vertical to Lab Assistant */}
+          <Line top={390} left={630} height={20} /> {/* Vertical to Lab Technologist */}
+          <Line top={390} left={810} height={20} /> {/* Vertical to Phlebotomist */}
 
         </div>
       </div>

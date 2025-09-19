@@ -4,7 +4,7 @@ export default function Home() {
   // Exact organizational data from the image
   const orgData = [
     { id: '1', name: 'Mansoor Ahmad', title: 'CEO' },
-    { id: '2', name: 'Besharat Gill', title: 'HRO', parentId: '1' },
+    { id: '2', name: 'Basharat Gill', title: 'HRO', parentId: '1' },
     { id: '3', name: 'Dr Mudasar Hussain', title: 'Pathologist', parentId: '1' },
     { id: '4', name: 'Danish Gill', title: 'Lab Manager', parentId: '2' },
     { id: '5', name: 'Muhammad Waseem', title: 'Account Manager', parentId: '2' },
@@ -12,7 +12,7 @@ export default function Home() {
     { id: '7', name: 'Mudasir', title: 'Senior Technician', parentId: '4' },
     { id: '8', name: 'Muhammad Adeel', title: 'Jr Lab Technician', parentId: '4' },
     { id: '9', name: 'Saba Noor', title: 'Lab Assistant', parentId: '5' },
-    { id: '10', name: 'Sahar Nasir', title: 'Lab Technician', parentId: '6' },
+    { id: '10', name: 'Sahar Nasir', title: 'Lab Technologist', parentId: '6' },
     { id: '11', name: 'Bisma', title: 'Phlebotomist', parentId: '6' }
   ];
 
