@@ -22,7 +22,7 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
       
       const canvas = await html2canvas(chartRef.current, {
         backgroundColor: '#ffffff',
-        scale: 4,
+        scale: 6,
         useCORS: true,
         allowTaint: false,
         width: chartRef.current.scrollWidth,
@@ -65,18 +65,18 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           : 'bg-white text-gray-700 border-gray-300'
       }`}
       style={{
-        width: '180px',
-        height: '60px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        padding: '8px',
-        fontSize: '12px',
-        lineHeight: '1.2'
+        width: '200px',
+        height: '80px',
+        boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
+        padding: '12px',
+        fontSize: '16px',
+        lineHeight: '1.3'
       }}
     >
       <div className={`font-semibold ${isCEO ? 'text-white' : 'text-blue-600'} mb-1`}>
         {node.title}
       </div>
-      <div className={`${isCEO ? 'text-white' : 'text-gray-800'} text-xs`}>
+      <div className={`${isCEO ? 'text-white' : 'text-gray-800'} text-sm`}>
         {node.name}
       </div>
     </div>
@@ -125,7 +125,7 @@ export default function ProfessionalOrgChart({ nodes }: ProfessionalOrgChartProp
           ref={chartRef}
           className="inline-block bg-white p-24 rounded-xl"
         >
-          <div className="relative mx-auto" style={{ width: '1060px', height: '600px' }}>
+          <div className="relative mx-auto" style={{ width: '1300px', height: '750px' }}>
           
           {/* CEO - Level 1 */}
           <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '50px' }}>
