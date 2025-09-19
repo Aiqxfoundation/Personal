@@ -3,7 +3,7 @@ import ProfessionalOrgChart from '../ProfessionalOrgChart';
 export default function ProfessionalOrgChartExample() {
   const orgData = [
     { id: '1', name: 'Mansoor Ahmad', title: 'CEO' },
-    { id: '2', name: 'Bashart Gill', title: 'HRO', parentId: '1' },
+    { id: '2', name: 'Besharat Gill', title: 'HRO', parentId: '1' },
     { id: '3', name: 'Dr Mudasar Hussain', title: 'Pathologist', parentId: '1' },
     { id: '4', name: 'Danish Gill', title: 'Lab Manager', parentId: '2' },
     { id: '5', name: 'Muhammad Waseem', title: 'Account Manager', parentId: '2' },
